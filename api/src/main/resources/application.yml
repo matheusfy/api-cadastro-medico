@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: api
+  datasource:
+    url: jdbc:mysql://localhost:5430/voll_med
+    username: testuser
+    password: testpassword
+  devtools:
+    livereload:
+      enabled: true
+  flyway:
+    enabled: true
+    password: testpassword
+    user: testuser
+    url: jdbc:mysql://localhost:5430/voll_med
+server:
+  error:
+    include-stacktrace: never
