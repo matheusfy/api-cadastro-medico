@@ -40,7 +40,7 @@ public class Paciente {
     @OneToMany(mappedBy = "paciente")
     private List<Consulta> consultas = new ArrayList<>();
 
-    public Paciente(CadastroPacienteDTO paciente){
+    public Paciente(CadastroPacienteDTO paciente) {
         this.nome = paciente.nome();
         this.telefone = paciente.telefone();
         this.email = paciente.email();
@@ -50,20 +50,23 @@ public class Paciente {
         this.endereco = new Endereco(paciente.endereco());
     }
 
-    public void atualizarCadastro(pacienteUpdateDTO pacienteDTO) {
+    public boolean atualizarCadastro(pacienteUpdateDTO pacienteDTO) {
         boolean updated = false;
-        if(pacienteDTO.enderecoDTO() != null){
+        if (pacienteDTO.enderecoDTO() != null) {
             updated = this.endereco.atualizaEndereco(pacienteDTO.enderecoDTO());
         }
-        if(validString(pacienteDTO.nome())){
+        if (validString(pacienteDTO.nome()) && !nome.equals(pacienteDTO.nome())) {
             this.nome = pacienteDTO.nome();
             updated = true;
         }
-        if(validString(pacienteDTO.telefone())){
+        if (validString(pacienteDTO.telefone()) && !telefone.equals(pacienteDTO.telefone())) {
+
             this.telefone = pacienteDTO.telefone();
             updated = true;
         }
-        if(updated) this.lastUpdate = LocalDateTime.now();
+        if (updated)
+            this.lastUpdate = LocalDateTime.now();
+        return updated;
     }
 
     public void desativar() {

@@ -21,14 +21,20 @@ public class PacienteService {
     }
 
     @Transactional
-    public void cadastrarPaciente(CadastroPacienteDTO pacienteDTO){
-        repository.save(new Paciente(pacienteDTO));
+    public PacienteListagemDTO cadastrarPaciente(CadastroPacienteDTO pacienteDTO) {
+        Paciente paciente = repository.save(new Paciente(pacienteDTO));
+        return new PacienteListagemDTO(paciente);
     }
 
     @Transactional
-    public void atualizarPaciente(pacienteUpdateDTO pacienteDTO) {
+    public pacienteUpdateDTO atualizarPaciente(pacienteUpdateDTO pacienteDTO) {
         Paciente paciente = repository.getReferenceById(pacienteDTO.id());
-        paciente.atualizarCadastro(pacienteDTO);
+        boolean atualizado = paciente.atualizarCadastro(pacienteDTO);
+
+        if (!atualizado) {
+            throw new NotUpdatedException("Paciente não atualizado pois não houve alterações.");
+        }
+        return new pacienteUpdateDTO(paciente);
     }
 
     @Transactional
@@ -39,5 +45,9 @@ public class PacienteService {
 
     public Paciente buscaPacientePorNome(String nome) {
         return repository.getReferenceByNomeIgnoreCaseAndAtivoTrue(nome);
+    }
+
+    public Paciente getPacienteById(Long id) {
+        return repository.getReferenceById(id);
     }
 }

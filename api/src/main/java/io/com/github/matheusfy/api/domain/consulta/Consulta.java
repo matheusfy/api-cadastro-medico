@@ -28,13 +28,17 @@ public class Consulta {
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
 
+    private Boolean cancelado;
+
     private LocalDateTime dataHora;
 
-    public Consulta(@NonNull Medico medico, @NonNull Paciente paciente, @NotBlank LocalDateTime dataHora) {
+    public Consulta(@NonNull Medico medico, @NonNull Paciente paciente, @NotBlank LocalDateTime dataHora,
+            Boolean cancelado) {
         this.id = null;
         this.medico = medico;
         this.paciente = paciente;
         this.dataHora = dataHora;
+        this.cancelado = cancelado;
     }
 
     @Override
@@ -47,4 +51,7 @@ public class Consulta {
                 """.formatted(medico.getNome(), paciente.getNome(), dateFromLocalDateTime(dataHora));
     }
 
+    public void cancelaConsulta() {
+        this.cancelado = true;
+    }
 }

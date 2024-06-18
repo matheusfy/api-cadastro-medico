@@ -1,0 +1,1 @@
+update consultas set cancelado = false where cancelado is null;

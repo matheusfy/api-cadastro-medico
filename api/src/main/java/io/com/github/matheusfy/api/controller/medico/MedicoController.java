@@ -1,11 +1,12 @@
 package io.com.github.matheusfy.api.controller.medico;
 
 import io.com.github.matheusfy.api.domain.medico.Medico;
+import io.com.github.matheusfy.api.domain.medico.MedicoService;
 import io.com.github.matheusfy.api.domain.medico.dto.MedicoCadastroDTO;
 import io.com.github.matheusfy.api.domain.medico.dto.MedicoDetalheDTO;
 import io.com.github.matheusfy.api.domain.medico.dto.MedicoListagemDTO;
-import io.com.github.matheusfy.api.domain.medico.MedicoService;
 import io.com.github.matheusfy.api.domain.medico.dto.MedicoUpdateDTO;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/medico")
+@SecurityRequirement(name = "bearer-key")
 public class MedicoController {
 
     @Autowired

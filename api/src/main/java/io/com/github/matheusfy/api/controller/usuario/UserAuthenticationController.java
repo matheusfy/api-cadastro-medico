@@ -26,17 +26,13 @@ public class UserAuthenticationController {
 	TokenService tokenService;
 
 	@PostMapping
-	public ResponseEntity LoginUser(@RequestBody @Valid UserAuthenticationDTO userLogin) {
-		try{
-			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userLogin.login(),
-				userLogin.senha());
-			Authentication authentication = manager.authenticate(token);
-			String tokenJWT = tokenService.generateToken((Usuario) authentication.getPrincipal());
+	public ResponseEntity<DadosTokenDTO> LoginUser(@RequestBody @Valid UserAuthenticationDTO userLogin) {
 
-			return ResponseEntity.ok(new DadosTokenDTO(tokenJWT));
-		} catch(Exception e){
-			e.printStackTrace();
-			return ResponseEntity.badRequest().body((e.getMessage()));
-		}
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userLogin.login(),
+				userLogin.senha());
+		Authentication authentication = manager.authenticate(token);
+		String tokenJWT = tokenService.generateToken((Usuario) authentication.getPrincipal());
+
+		return ResponseEntity.ok(new DadosTokenDTO(tokenJWT));
 	}
 }

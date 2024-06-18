@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import static io.com.github.matheusfy.api.domain.Util.Util.validString;
 
-
 @Embeddable
 @Getter
 @NoArgsConstructor
@@ -28,7 +27,7 @@ public class Endereco {
 
     private String cep;
 
-    public Endereco(EnderecoDTO enderecoDTO){
+    public Endereco(EnderecoDTO enderecoDTO) {
         this.logradouro = enderecoDTO.logradouro();
         this.numero = enderecoDTO.numero();
         this.complemento = enderecoDTO.complemento();
@@ -38,37 +37,37 @@ public class Endereco {
         this.cep = enderecoDTO.cep();
     }
 
-    public EnderecoDTO toDTO(){
+    public EnderecoDTO toDTO() {
         return new EnderecoDTO(logradouro, bairro, cidade, uf, cep, numero, complemento);
     }
 
     public boolean atualizaEndereco(EnderecoDTO novoEndereco) {
         boolean updated = false;
-        if(validString(novoEndereco.logradouro())){
+        if (validString(novoEndereco.logradouro()) && !logradouro.equals(novoEndereco.logradouro())) {
             this.logradouro = novoEndereco.logradouro();
             updated = true;
         }
-        if(validString(novoEndereco.numero())){
+        if (validString(novoEndereco.numero()) && !numero.equals(novoEndereco.numero())) {
             this.numero = novoEndereco.numero();
             updated = true;
         }
-        if( validString(novoEndereco.complemento())){
+        if (validString(novoEndereco.complemento()) && !complemento.equals(novoEndereco.complemento())) {
             this.complemento = novoEndereco.complemento();
             updated = true;
         }
-        if(validString(novoEndereco.bairro())){
+        if (validString(novoEndereco.bairro()) && !bairro.equals(novoEndereco.bairro())) {
             this.bairro = novoEndereco.bairro();
             updated = true;
         }
-        if(validString(novoEndereco.cidade())){
+        if (validString(novoEndereco.cidade()) && !cidade.equals(novoEndereco.cidade())) {
             this.cidade = novoEndereco.cidade();
             updated = true;
         }
-        if(validString(novoEndereco.uf())){
+        if (validString(novoEndereco.uf()) && !uf.equals(novoEndereco.uf())) {
             this.uf = novoEndereco.uf();
             updated = true;
         }
-        if(validString(novoEndereco.cep())){
+        if (validString(novoEndereco.cep()) && !cep.equals(novoEndereco.cep())) {
             this.cep = novoEndereco.cep();
             updated = true;
         }

@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.web.AbstractRequestMatcherRegistry;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,17 +23,17 @@ public class SecurityConfiguration {
 	@Autowired
 	private SecurityFilter securityFilter;
 
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		return http.csrf(AbstractHttpConfigurer::disable)
 				.sessionManagement(sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.authorizeHttpRequests(authorizeHttpRequests -> {
-				authorizeHttpRequests.requestMatchers(HttpMethod.POST, "/login").permitAll();
-				authorizeHttpRequests.anyRequest().authenticated();
-			})
-			.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-			.build();
+				.authorizeHttpRequests(authorizeHttpRequests -> {
+					authorizeHttpRequests.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/*").permitAll();
+					authorizeHttpRequests.requestMatchers(HttpMethod.POST, "/login").permitAll();
+					authorizeHttpRequests.anyRequest().authenticated();
+				}).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
 	}
 
 	@Bean

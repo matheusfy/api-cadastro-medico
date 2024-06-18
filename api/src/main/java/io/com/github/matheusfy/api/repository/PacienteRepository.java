@@ -11,4 +11,6 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long> {
     Page<Paciente> findAllByAtivoTrue(Pageable pageable);
 
     Paciente getReferenceByNomeIgnoreCaseAndAtivoTrue(String nome);
+
+    boolean existsByIdAndAtivoTrue(Long pacienteId);
 }

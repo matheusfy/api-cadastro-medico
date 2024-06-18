@@ -1,5 +1,6 @@
 package io.com.github.matheusfy.api.domain.medico;
 
+import io.com.github.matheusfy.api.domain.consulta.dto.CadastroConsultaDTO;
 import io.com.github.matheusfy.api.domain.medico.dto.MedicoCadastroDTO;
 import io.com.github.matheusfy.api.domain.medico.dto.MedicoDetalheDTO;
 import io.com.github.matheusfy.api.domain.medico.dto.MedicoListagemDTO;
@@ -26,15 +27,14 @@ public class MedicoService {
     }
 
     @Transactional
-    public Medico cadastrarMedico(MedicoCadastroDTO medicoCadastroDTO){
+    public Medico cadastrarMedico(MedicoCadastroDTO medicoCadastroDTO) {
         return repository.save(new Medico(medicoCadastroDTO));
     }
 
     @Transactional
     public MedicoDetalheDTO updateMedico(MedicoUpdateDTO dadosMedicoAtualizado) {
 
-        //TODO: Tratar caso aconteça de tentar atualizar um cadastro inativo.
-        Medico medicoBuscado = repository.getReferenceById(dadosMedicoAtualizado.id());
+        Medico medicoBuscado = repository.getReferenceByIdAndAtivoTrue(dadosMedicoAtualizado.id());
         medicoBuscado.updateInfo(dadosMedicoAtualizado);
         medicoBuscado.setLastUpdate(LocalDateTime.now());
         return new MedicoDetalheDTO(medicoBuscado);
@@ -52,15 +52,24 @@ public class MedicoService {
         return new MedicoListagemDTO(medico);
     }
 
-    public Medico buscaMedicoPorNome(String nome){
+    public Medico buscaMedicoPorNome(String nome) {
         return repository.getReferenceByNomeIgnoreCaseAndAtivoTrue(nome);
     }
 
-    public List<Medico> buscaMedicosLivres(LocalDateTime horario) {
-        return repository.buscaMedicosLivresNoHorario(horario);
+    public Medico getMedicoById(Long id) {
+        return repository.getReferenceById(id);
     }
 
-    public boolean isMedicoDisponivel(Long id, LocalDateTime horaAgendamento) {
-        return repository.medicoDisponivel(id, horaAgendamento) == 1;
+    public Medico getMedico(CadastroConsultaDTO cadastroConsulta) {
+
+        if (cadastroConsulta.medicoId() != null) {
+            return getMedicoById(cadastroConsulta.medicoId());
+        }
+        return repository.buscaMedicoLivreNoHorarioPorEspecialidade(cadastroConsulta.dataHora(),
+                cadastroConsulta.especialidade().toString());
+    }
+
+    public List<Medico> getMedicosPorEspecialidade(CadastroConsultaDTO cadastroConsulta) {
+        return repository.getMedicoByEspecialidade(cadastroConsulta.especialidade());
     }
 }
